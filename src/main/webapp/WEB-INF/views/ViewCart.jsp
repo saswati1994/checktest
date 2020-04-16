@@ -15,12 +15,42 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  
 </head>
 
 
   <body>
+  <script>
+  function sendData(){
+	  
+	  var myHeaders = new Headers();
+	  myHeaders.append("Content-Type","application/json");
+	  var data = JSON.stringify({"placedDate":"2020-04-16","cart":{"cartId":${cartitems.getCartId()}}});
+	  
+	  var requestOptions={
+			  method:'POST',
+			  headers:myHeaders,
+			  body:data,
+			  
+	  };
+	 
+	  fetch("http://localhost:8080/order",requestOptions)
+	  
+	   .then(response=>{
+		   responseObject = response;
+		   response.text()
+	   })
+			   
+	  .then(result=>{
+		  window.location.href = "/order"+"?orderId="+result;
+		  console.log(result);
+	  })
+	  .catch(error=>console.log('error',error)); 
+  }
+  
+  
+  
+  </script>
   <nav class="navbar navbar-dark bg-primary">
     <span class="navbar-brand mb-0 h1">Checkout</span>
     </nav>
@@ -55,58 +85,10 @@
         <div class= "col">
          <h2>Total Price: ${totalPrice} </h2>
          </div>
-        <button type="submit" class="btn btn-primary btn-lg" id='orderButton'>Place Order</button>
+        <button type="submit" onclick="sendData()" class="btn btn-primary btn-lg">Place Order</button>
+         
         </div>
 
       </body>
-      <script  th:inline="javascript">
       
-      var orderInfo={}
-      
-      $('#orderButton').submit(function(e){
-    	  alert(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    	  e.preventDefault(); 
-         $.ajax({
-		type : "POST",
-		async:false,	
-		contentType : "application/json",
-		url :"/order",		
-		data : JSON.stringify(retrieveFieldVal()),		
-		success : function(data) {
-			if(data==true){				
-				alert("Order Placed")				
-				window.location.href='SuccessOrder';
-				
-			}else{
-				alert(data)
-				//$('.error_msg').show();
-				//$('.error_msg').html(data);		
-				
-			}
-			
-		},
-		error: function(xhr, status, error) {
-			  var err = eval("(" + xhr.responseText + ")");
-		}
-	});
-      });   
-      
-      
-         function retrieveFieldVal(){
-        	 alert( $('#cartId').html())
-        		orderInfo={
-        				placedDate:"2020-04-16",
-        				cartId: $('#cartId').html()
-        		}
-        		
-        		/* $('.reg_det').each(function(){	
-        			console.log($(this).attr('id'))
-        			orderInfo[$(this).attr('id')] =$(this).val();        
-        	        
-        		}); */	
-        		
-        		return orderInfo;
-        		
-        	}
-   </script>
 </html>

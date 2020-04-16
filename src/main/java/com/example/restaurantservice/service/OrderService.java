@@ -28,7 +28,7 @@ public class OrderService {
 
 	private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-	public ResponseEntity<String> placeOrder(OrderDto orderDto) {
+	public boolean placeOrder(OrderDto orderDto) {
 		Optional<Cart> cart = cartRepository.findById(orderDto.getCart().getCartId());
 		logger.info("checking orderId present or not");
 		if (cart.isPresent()) {
@@ -39,7 +39,7 @@ public class OrderService {
 			
 			orderRepository.save(order);
 			logger.info("order placed");
-			return new ResponseEntity<String>("order placed", HttpStatus.OK);
+			return true;
 
 		} else {
 			throw new CartNotFoundException("cartNotFoundException");

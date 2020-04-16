@@ -47,8 +47,8 @@ public class TestController {
 
 	  }
 
-/*
-	  @GetMapping("/cart")
+
+	 /* @GetMapping("/cart")
 	  public ResponseEntity<List<Cart>> getAllCarts(){
 
 	    return  new ResponseEntity(cartRepository.findAll(), HttpStatus.OK);
@@ -82,7 +82,7 @@ public class TestController {
 		 model.put("totalPrice", totalPrice);
 		 model.put("cartitems", cart);
 		 model.put("items", items);
-		return "checkout";
+		return "ViewCart";
 		  
 	  }
 	  
